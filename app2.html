@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div id="homeblock">
+<h1>Home Page</h1>
+<br><br>
+<button class="btn btn-outline-info btn-lg" id="signuphomebtn">Signup</button>
+<button class="btn btn-outline-warning btn-lg" id="loginhomebtn">Login</button>
+  </div>
+
+
+
+  <div id="signupblock" style="display: none">
+    <label >Email</label><input type="email" placeholder="Enter email" id="emailInp">
+    <br><br>
+    <label for="">Password</label><input type="password" id="passInp">
+    <br><br>
+    <button class="btn btn-success btn-lg" id="signupmainbtn">Sign up</button>
+  </div>
+
+  <div id="loginblock" style="display:none">
+    <label >Email</label><input type="email" placeholder="Enter email" id="loginemailInp">
+    <br><br>
+    <label for="">Password</label><input type="password" id="loginpassInp">
+    <br><br>
+    <button class="btn btn-success btn-lg" id="loginmainbtn">login</button>
+  </div>
+</body>
+</html>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+  import { getDatabase, set, ref } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "https://www.gstatic.com/firebasejs/9.9.4/firebase-auth.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXD9hKcGCIng9xRhZIVEtOBJo9bIeP5s8",
+    authDomain: "formaldb.firebaseapp.com",
+    databaseURL: "https://formaldb-default-rtdb.firebaseio.com",
+    projectId: "formaldb",
+    storageBucket: "formaldb.appspot.com",
+    messagingSenderId: "977775813737",
+    appId: "1:977775813737:web:e9c3d933f8dde71e55eef8"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+  const auth = getAuth();
+
+  signuphomebtn.addEventListener('click',(e)=>{
+   document.getElementById('homeblock').style.display ='none';
+   document.getElementById('signupblock').style.display = 'block';
+  });
+  loginhomebtn.addEventListener('click',(e)=>{
+    document.getElementById('homeblock').style.display ='none';
+    document.getElementById('loginblock').style.display = 'block';
+   });
+   signupmainbtn.addEventListener('click',(e)=>{
+    var email = document.getElementById('emailInp').value;
+    var password = document.getElementById('passInp').value;
+
+    createUserWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+    const user = userCredential.user;
+    set(ref(database, 'users/'+user.uid),{
+      email:email,
+      password:password
+    }).then(()=>{
+      alert("User Registered Successfully!");
+    }).catch((error)=>{
+      alert(error);
+    })
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorMessage);
+    // ..
+  });
+
+   });
+   loginmainbtn.addEventListener('click',(e)=>{
+    var email = document.getElementById('loginemailInp').value;
+    var password = document.getElementById('loginpassInp').value;
+
+    signInWithEmailAndPassword(auth, email, password)
+  .then((userCredential) => {
+    // Signed in 
+  //  const user = userCredential.user;
+    // ...
+    alert("Login Successfull!!");
+  })
+  .catch((error) => {
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    alert(errorMessage);
+  });
+
+   });
+</script>

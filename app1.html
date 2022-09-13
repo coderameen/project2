@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+<body>
+  <div>
+    <label >Name</label><input type="text" class="form-control w-25" placeholder="Enter your Name" id="nameInp"><br><br>
+    <label>Age</label><input type="text" placeholder="Enter your Age" id="ageInp" class="form-control w-25"><br><br>
+    <label >Branch</label><input type="text" placeholder="Enter your Branch" id="branchInp" class="form-control w-25">
+  </div>
+  <br><br>
+  <button type="button" class="btn btn-outline-info" id="insertbtn">INSERT</button>
+  <button type="button" class="btn btn-outline-danger" id="deletebtn">DELETE</button>
+  <button type="button" class="btn btn-outline-warning" id="updatebtn">UPDATE</button>
+  <button type="button" class="btn btn-outline-success" id="fetchbtn">FETCH</button>
+  
+</body>
+</html>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+  import { getDatabase,set, ref, onValue, update, remove } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXD9hKcGCIng9xRhZIVEtOBJo9bIeP5s8",
+    authDomain: "formaldb.firebaseapp.com",
+    databaseURL: "https://formaldb-default-rtdb.firebaseio.com",
+    projectId: "formaldb",
+    storageBucket: "formaldb.appspot.com",
+    messagingSenderId: "977775813737",
+    appId: "1:977775813737:web:e9c3d933f8dde71e55eef8"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+  insertbtn.addEventListener('click',(e)=>{
+var name = document.getElementById('nameInp').value;
+var age = document.getElementById('ageInp').value;
+var branch = document.getElementById('branchInp').value;
+
+set(ref(database, 'students/'+name),{
+  name:name,
+  age: age,
+  branch: branch
+}).then(()=>{
+  alert("Student data has inserted Successfuly!");
+}).catch((error)=>{
+  alert(error);
+});
+  });
+
+  deletebtn.addEventListener('click',(e)=>{
+ var name = document.getElementById('nameInp').value;
+var age = document.getElementById('ageInp').value;
+var branch = document.getElementById('branchInp').value;
+
+     remove(ref(database, 'students/'+name));
+     alert("Student Record deleted!!");
+  });
+
+  updatebtn.addEventListener('click', (e)=>{
+    var name = document.getElementById('nameInp').value;
+    var age = document.getElementById('ageInp').value;
+    var branch = document.getElementById('branchInp').value;
+
+    update(ref(database, 'students/'+name),{
+      age:age,
+      branch:branch
+    }).then(()=>{
+      alert("Student Record Updated Successfully!");
+    }).catch((error)=>{
+      alert(error);
+    });
+  });
+
+  fetchbtn.addEventListener('click', (e)=>{
+    var name = document.getElementById('nameInp').value;
+    var age = document.getElementById('ageInp').value;
+    var branch = document.getElementById('branchInp').value;
+
+    const starCountRef = ref(database, 'students/' + name);
+onValue(starCountRef, (snapshot) => {
+  const data = snapshot.val();
+  document.getElementById('ageInp').value = data.age;
+  document.getElementById('branchInp').value = data.branch;
+});
+  });
+
+
+
+</script>

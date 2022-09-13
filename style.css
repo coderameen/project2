@@ -1,0 +1,24 @@
+*{
+  padding:0px;
+  margin:0px;
+  box-sizing: border-box;
+}
+#homeblock{
+  width:100%;
+  height:100vh;
+  background-size: 100% 100%;
+  background-color: antiquewhite;
+}
+#signupblock{
+  width:100%;
+  height:100vh;
+  background-size: 100% 100%;
+  background-color: rgb(95, 174, 125);
+}
+#loginblock{
+  width:100%;
+  height:100vh;
+  background-size: 100% 100%;
+  background-color: rgb(214, 117, 216);
+
+}
