@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <input id="name" type="text" placeholder="Enter name"><br><br>
+  <input type="text" id="age" placeholder="enter your age">
+  <br><br>
+<input type="text" id="branch" placeholder="enter your branch">
+<br><br>
+<button id="submitbtn">submit</button>
+</body>
+</html>
+<script type="module">
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+  import { getDatabase, set, ref, update, onValue, remove } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyD2zHIbiENLmhe1YnYQtfsSdMlCHARsVXg",
+    authDomain: "myprojectdb-cab1b.firebaseapp.com",
+    databaseURL: "https://myprojectdb-cab1b-default-rtdb.firebaseio.com",
+    projectId: "myprojectdb-cab1b",
+    storageBucket: "myprojectdb-cab1b.appspot.com",
+    messagingSenderId: "587290599920",
+    appId: "1:587290599920:web:a079d454f05db9b7763d35"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+
+  submitbtn.addEventListener('click', (e)=>{
+   var name = document.getElementById('name').value;
+   var age = document.getElementById('age').value;
+   var branch = document.getElementById('branch').value;
+
+   //set
+   /*
+   set(ref(database, 'students/'+name),{
+    name: name,
+    age:age,
+    branch:branch
+   }).then(()=>{
+    alert("Student data inserted Successfully!");
+   }).catch((error)=>{
+    alert(error);
+   });
+   */
+
+   //READ
+   /*
+   const starCountRef = ref(database, 'students/' + name);
+   onValue(starCountRef, (snapshot) => {
+     const data = snapshot.val();
+     document.getElementById('age').value = data.age;
+     document.getElementById('branch').value = data.branch;
+
+   });
+  */
+  /*
+  update(ref(database, 'students/'+name),{
+    name: name,
+    age:age,
+    branch:branch
+   }).then(()=>{
+    alert("Student data updated Successfully!");
+   }).catch((error)=>{
+    alert(error);
+   });
+   */
+   remove(ref(database,'students/'+name));
+   alert("Student data deleted successfully");
+   
+  });
+</script>
