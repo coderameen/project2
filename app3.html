@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="bootstrap.min.css">
+</head>
+<body>
+  <div class="container mt-4">
+    <table class="table table-primary">
+      <thead>
+        <th>NAME</th><th>AGE</th><th>BRANCH</th>
+      </thead>
+      <tbody id="tbodyid">
+
+      </tbody>
+    </table>
+
+    <input type="text" placeholder="Enter Name" id="nameInp" required class="form-control w-25"><br><br>
+
+  <input type="text" placeholder="Enter Age" id="ageInp" required class="form-control w-25"><br><br>
+
+  <input type="text" placeholder="Enter Branch" id="branchInp" required class="form-control w-25"><br><br>
+
+  <button type="button" id="insertbtn" class="btn btn-outline-info btn-lg">INSERT</button>
+  </div>
+</body>
+</html>
+<script type="module">
+let tbody = document.getElementById('tbodyid');
+
+function addToTable(name,age,branch){
+  let trow = document.createElement('tr');
+  let td1 = document.createElement('td');
+  let td2 = document.createElement('td');
+  let td3 = document.createElement('td');
+
+  td1.innerHTML = name;
+  td2.innerHTML = age;
+  td3.innerHTML = branch;
+
+  trow.appendChild(td1);
+  trow.appendChild(td2);
+  trow.appendChild(td3);
+
+  tbody.appendChild(trow);
+}
+
+function addDataToTable(TheStudent){
+  tbody.innerHTML = "";
+  TheStudent.forEach(element =>{
+    addToTable(element.name, element.age, element.branch);
+
+  });
+}
+
+
+
+  // Import the functions you need from the SDKs you need
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-app.js";
+  import { getDatabase, set, ref, child, onValue, get } from "https://www.gstatic.com/firebasejs/9.9.4/firebase-database.js";
+  // TODO: Add SDKs for Firebase products that you want to use
+  // https://firebase.google.com/docs/web/setup#available-libraries
+
+  // Your web app's Firebase configuration
+  const firebaseConfig = {
+    apiKey: "AIzaSyDXD9hKcGCIng9xRhZIVEtOBJo9bIeP5s8",
+    authDomain: "formaldb.firebaseapp.com",
+    databaseURL: "https://formaldb-default-rtdb.firebaseio.com",
+    projectId: "formaldb",
+    storageBucket: "formaldb.appspot.com",
+    messagingSenderId: "977775813737",
+    appId: "1:977775813737:web:e9c3d933f8dde71e55eef8"
+  };
+
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+
+
+
+  
+function getRealTimeData(){
+  var dbRef = ref(database, "students");
+  onValue(dbRef,(snapshot)=>{
+    var studentarr = [];
+    snapshot.forEach(childSnapshot =>{
+      studentarr.push(childSnapshot.val());
+    });
+    addDataToTable(studentarr);
+  });
+}
+
+window.onload = getRealTimeData;
+
+
+
+
+  insertbtn.addEventListener('click',(e)=>{
+ var name = document.getElementById('nameInp').value;
+ var age = document.getElementById('ageInp').value;
+ var branch = document.getElementById('branchInp').value;
+
+
+ set(ref(database,'students/'+name),{
+ name:name,
+ age:age,
+ branch:branch
+ }).then(()=>{
+  alert("Student Record inserted Successfully!");
+ }).catch((error)=>{
+  alert(error);
+ });
+
+  });
+
+</script>
